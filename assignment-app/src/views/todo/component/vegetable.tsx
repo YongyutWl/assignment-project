@@ -8,7 +8,13 @@ export type Props = {
   type: string;
 };
 
-export default function Vegetable({ fruitList }: { fruitList: Props[] }) {
+export default function Vegetable({
+  vegetableList,
+  handleList,
+}: {
+  vegetableList: Props[];
+  handleList: any;
+}) {
   return (
     <React.Fragment>
       <Typography
@@ -23,8 +29,8 @@ export default function Vegetable({ fruitList }: { fruitList: Props[] }) {
         sx={{ width: "100%", display: "flex", flexDirection: "column" }}
       >
         <Stack spacing={2}>
-          {fruitList.map((item, index) => {
-            return <VegetableItem key={item.key} vegetableList={item} />;
+          {vegetableList.map((item, index) => {
+            return <VegetableItem key={item.key} vegetableItem={item} funchange={handleList}/>;
           })}
         </Stack>
       </Grid>

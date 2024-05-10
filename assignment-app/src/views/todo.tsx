@@ -73,6 +73,13 @@ function Todo({}: Props) {
   const [vegetableList, setVegetableList] = useState<fruitOrVegetableType[]>(
     []
   );
+
+  const handleVegetable = (item: fruitOrVegetableType) => {
+    setTodoLists((prev) => [...prev, item]);
+    setVegetableList((prev) => {
+      return prev.filter((ele) => ele.key !== item.key);
+    });
+  };
   console.log(mapKeyIdToList);
   return (
     <React.Fragment>
@@ -146,7 +153,7 @@ function Todo({}: Props) {
           <Fruit fruitList={fruitList} />
         </Grid>
         <Grid item sx={{ width: "30%" }}>
-          <Vegetable fruitList={vegetableList} />
+          <Vegetable vegetableList={vegetableList} handleList={handleVegetable}/>
         </Grid>
       </Grid>
     </React.Fragment>
