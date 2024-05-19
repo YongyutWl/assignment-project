@@ -10,8 +10,8 @@ const ManageData = () => {
   const departmentGroup = _.groupBy(data?.users, "company.department");
   const groupUserLength = _.keys(departmentGroup);
 
-  const sumByGender = _.sumBy(data?.users, "gender");
-  console.log("sumByGender >>", sumByGender);
+  const countGender = _.countBy(productManager, "gender");
+  const countHair = _.countBy(productManager, "hair.color");
 
   /*[Department]: 
   {
@@ -33,6 +33,10 @@ const ManageData = () => {
   console.log("data  >>", data);
   console.log("groupUser  >>", departmentGroup);
   console.log("groupUserLength  >>", groupUserLength);
+  console.log("productManager  >>", productManager);
+
+  console.log("countHair  >>", countHair);
+  console.log("countGender  >>", countGender);
   const getMockUserData = async () => {
     try {
       const res = await getUserMockup();
