@@ -15,18 +15,18 @@ const ManageData = () => {
 
   /*[Department]: 
   {
-            "male": 1,                      // ---> Male Count Summary
-            "female": 1,                    // ---> Female Count Summary
-            "ageRange": "XX-XX",            // ---> Range
-            "hair": {                       // ---> "Color": Color Summary
-                "Black": 1,                
-                "Blond": 1,
-                "Chestnut": 1,
-                "Brown": 1
+    "male": 1,                      // ---> Male Count Summary
+    "female": 1,                    // ---> Female Count Summary
+    "ageRange": "XX-XX",            // ---> Range
+    "hair": {                       // ---> "Color": Color Summary
+              "Black": 1,                
+              "Blond": 1,
+              "Chestnut": 1,
+              "Brown": 1
             },
-            "addressUser": {                // ---> "firstNamelastName": postalCode
-                "TerryMedhurst": "XXXXX",
-            }
+    "addressUser": {                // ---> "firstNamelastName": postalCode
+      "TerryMedhurst": "XXXXX",
+      }
     }
    */
 
