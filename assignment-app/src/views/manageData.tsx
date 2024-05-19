@@ -1,13 +1,34 @@
 "use client";
-import { getUserMockup } from "@/api/mockupApi";
+import { getUserMockup, productManager } from "@/api/mockupApi";
 import { IMockUserDataRes } from "@/interface/userMockup";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 
 const ManageData = () => {
   const [data, setData] = useState<IMockUserDataRes>();
+
   const departmentGroup = _.groupBy(data?.users, "company.department");
   const groupUserLength = _.keys(departmentGroup);
+
+  const sumByGender = _.sumBy(data?.users, "gender");
+  console.log("sumByGender >>", sumByGender);
+
+  /*[Department]: 
+  {
+            "male": 1,                      // ---> Male Count Summary
+            "female": 1,                    // ---> Female Count Summary
+            "ageRange": "XX-XX",            // ---> Range
+            "hair": {                       // ---> "Color": Color Summary
+                "Black": 1,                
+                "Blond": 1,
+                "Chestnut": 1,
+                "Brown": 1
+            },
+            "addressUser": {                // ---> "firstNamelastName": postalCode
+                "TerryMedhurst": "XXXXX",
+            }
+    }
+   */
 
   console.log("data  >>", data);
   console.log("groupUser  >>", departmentGroup);
