@@ -1,21 +1,20 @@
 "use client";
 import React from "react";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/Inbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import { Grid, ListItem, Stack, Typography } from "@mui/material";
-import { nanoid } from "nanoid";
-import FruitItem from "../component/fruititem";
+import { Grid, Stack, Typography } from "@mui/material";
+import FruitItem from "./fruititem";
 export type Props = {
   key: string;
   name: string;
   type: string;
 };
 
-export default function fruit({ fruitList }: { fruitList: Props[] }) {
+export default function Fruit({
+  fruitList,
+  handleFruit,
+}: {
+  fruitList: Props[];
+  handleFruit: any;
+}) {
   return (
     <React.Fragment>
       <Typography
@@ -30,26 +29,15 @@ export default function fruit({ fruitList }: { fruitList: Props[] }) {
         sx={{ width: "100%", display: "flex", flexDirection: "column" }}
       >
         <Stack spacing={2}>
-          {/* {fruitList.map((item, index) => {
-            return (
-              <ListItem key={item.key}>
-                <ListItemButton
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log(item);
-                  }}
-                >
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })} */}
           {fruitList.map((item, index) => {
-            return <FruitItem key={item.key} FruitItem={item} />;
+            return (
+              <FruitItem
+                key={item.key}
+                FruitItem={item}
+                handleFruitItem={handleFruit}
+              />
+            );
           })}
-          {/* <FruitItem
-            FruitItem={{ key: nanoid(), name: "Apple", type: "Fruit" }}
-          /> */}
         </Stack>
       </Grid>
     </React.Fragment>

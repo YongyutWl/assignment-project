@@ -7,13 +7,12 @@ import { nanoid } from "nanoid";
 import Fruit from "../views/todo/component/fruit";
 import Vegetable from "./todo/component/vegetable";
 
-type Props = {};
 export type fruitOrVegetableType = {
   type: string;
   name: string;
   key: string;
 };
-function Todo({}: Props) {
+const Todo = () => {
   const listTodo = [
     {
       type: "Fruit",
@@ -60,7 +59,7 @@ function Todo({}: Props) {
       name: "Carrot",
     },
   ];
-  const mapKeyIdToList = listTodo.map((item, index) => {
+  const mapKeyIdToList = listTodo.map((item) => {
     return {
       key: nanoid(),
       ...item,
@@ -74,13 +73,33 @@ function Todo({}: Props) {
     []
   );
 
+  const handleList = (item: fruitOrVegetableType) => {
+    const filter = todoLists.filter((ele) => ele.key !== item.key);
+    if (item.type === "Fruit") {
+      setFruitList((prev) => [...prev, item]);
+    }
+    if (item.type === "Vegetable") {
+      setVegetableList((prev) => [...prev, item]);
+    }
+    setTodoLists(filter);
+  };
+  const handleFruit = (item: fruitOrVegetableType) => {
+    setFruitList((prev) => {
+      return prev.filter((ele) => ele.key !== item.key);
+    });
+    setTodoLists((prev) => {
+      return [...prev, item];
+    });
+  };
+
   const handleVegetable = (item: fruitOrVegetableType) => {
-    setTodoLists((prev) => [...prev, item]);
     setVegetableList((prev) => {
       return prev.filter((ele) => ele.key !== item.key);
     });
+    setTodoLists((prev) => {
+      return [...prev, item];
+    });
   };
-  console.log(mapKeyIdToList);
   return (
     <React.Fragment>
       <Grid
@@ -110,54 +129,60 @@ function Todo({}: Props) {
             Todo List
           </Typography>
         </Grid>
-        <Grid item sx={{ width: "30%" }}>
-          <Typography
-            variant="h6"
-            sx={{ textAlign: "center", bgcolor: "#EEF2F3", padding: "10px" }}
-          >
-            All
-          </Typography>
-
-          <Grid
-            item
-            sx={{ width: "100%", display: "flex", flexDirection: "column" }}
-          >
-            <Stack spacing={2}>
-              {todoLists.map((item: fruitOrVegetableType, index) => {
-                return (
-                  <ListItem key={item.key}>
-                    <ListItemButton
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (item.type === "Fruit") {
-                          setFruitList([...fruitList, item]);
-                        }
-                        if (item.type === "Vegetable") {
-                          setVegetableList([...vegetableList, item]);
-                        }
-                        const newTodoLists = todoLists.filter(
-                          (ele) => ele.key !== item.key
-                        );
-                        setTodoLists(newTodoLists);
-                      }}
-                    >
-                      <ListItemText primary={item.name} />
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </Stack>
+      </Grid>
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          p: 1,
+          gap: 1,
+        }}
+      >
+        <Grid item xs={3.5}>
+          <Grid item>
+            <Typography
+              variant="h6"
+              sx={{ textAlign: "center", bgcolor: "#EEF2F3", padding: "10px" }}
+            >
+              All
+            </Typography>
+            <Grid
+              item
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+            >
+              <Stack spacing={2}>
+                {todoLists.map((item: fruitOrVegetableType) => {
+                  return (
+                    <ListItem key={item.key}>
+                      <ListItemButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleList(item);
+                        }}
+                      >
+                        <ListItemText primary={item.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
+              </Stack>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item sx={{ width: "30%" }}>
-          <Fruit fruitList={fruitList} />
+        <Grid item xs={4}>
+          <Fruit fruitList={fruitList} handleFruit={handleFruit} />
         </Grid>
-        <Grid item sx={{ width: "30%" }}>
-          <Vegetable vegetableList={vegetableList} handleList={handleVegetable}/>
+        <Grid item xs={4}>
+          <Vegetable
+            vegetableList={vegetableList}
+            handleVegetable={handleVegetable}
+          />
         </Grid>
       </Grid>
     </React.Fragment>
   );
-}
+};
 
 export default Todo;

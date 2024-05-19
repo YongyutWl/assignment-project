@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { ListItem } from "@mui/material";
@@ -11,40 +11,32 @@ type VegetableItemProps = {
 
 export default function VegetableItem({
   vegetableItem,
-  funchange,
+  handleVegetable,
 }: {
   vegetableItem: VegetableItemProps;
-  funchange: any;
+  handleVegetable: (vegetableItem: VegetableItemProps) => void;
 }) {
-  const throwbackVegetable = async () => {
-    setTimeout(() => {
-      const timeout = setTimeout(() => {}, 5000);
+  const INTERVAL_MS = 5000;
+  const intervalId = useRef<NodeJS.Timeout | null>(null);
 
-      return () => {
-        clearTimeout(timeout);
-      };
-    });
-  };
   useEffect(() => {
-    console.log("vegetableItem", vegetableItem);
+    intervalId.current = setInterval(() => {
+      handleVegetable(vegetableItem);
+    }, INTERVAL_MS);
 
-    setTimeout(() => {
-      const timeout = setTimeout(() => {
-        funchange(vegetableItem);
-      }, 5000);
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    });
-  }, [vegetableItem]);
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+      }
+    };
+  }, [vegetableItem, handleVegetable]);
   return (
     <React.Fragment>
       <ListItem key={vegetableItem.key}>
         <ListItemButton
           onClick={(e) => {
             e.preventDefault();
-            console.log(vegetableItem);
+            handleVegetable(vegetableItem);
           }}
         >
           <ListItemText primary={vegetableItem.name} />
