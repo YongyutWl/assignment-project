@@ -3,15 +3,11 @@ import { getUserMockup, productManager } from "@/api/mockupApi";
 import { IMockUserDataRes } from "@/interface/userMockup";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
+import { Typography } from "@mui/material";
 
 const ManageData = () => {
   const [data, setData] = useState<IMockUserDataRes>();
-
-  const departmentGroup = _.groupBy(data?.users, "company.department");
-  const groupUserLength = _.keys(departmentGroup);
-
-  const countGender = _.countBy(productManager, "gender");
-  const countHair = _.countBy(productManager, "hair.color");
+  const [answerData, setAnswerData] = useState<any>();
 
   /*[Department]: 
   {
@@ -30,13 +26,42 @@ const ManageData = () => {
     }
    */
 
-  console.log("data  >>", data);
-  console.log("groupUser  >>", departmentGroup);
-  console.log("groupUserLength  >>", groupUserLength);
-  console.log("productManager  >>", productManager);
+  // console.log("answerData", answerData);
 
-  console.log("countHair  >>", countHair);
-  console.log("countGender  >>", countGender);
+  const findAnswer = (data: IMockUserDataRes) => {
+    if (!data) return;
+    const departmentGroup = _.groupBy(data?.users, "company.department");
+    const groupUserLength = _.keys(departmentGroup);
+
+    const answer = _.reduce(
+      groupUserLength,
+      (acc, item) => {
+        const minAge = _.minBy(departmentGroup[item], "age");
+        const maxAge = _.maxBy(departmentGroup[item], "age");
+        const countGender = _.countBy(departmentGroup[item], "gender");
+        const countHair = _.countBy(departmentGroup[item], "hair.color");
+        const addressUser = _.map(departmentGroup[item], (item) => {
+          return {
+            [`${item.firstName}${item.lastName}`]: item.address.postalCode,
+          };
+        });
+
+        return {
+          ...acc,
+          [item]: {
+            ...countGender,
+            ["ageRange"]: `${minAge?.age}-${maxAge?.age}`,
+            ["hair"]: countHair,
+            ["addressUser"]: addressUser,
+          },
+        };
+      },
+      {}
+    );
+
+    setAnswerData(answer);
+  };
+
   const getMockUserData = async () => {
     try {
       const res = await getUserMockup();
@@ -49,7 +74,32 @@ const ManageData = () => {
   useEffect(() => {
     getMockUserData();
   }, []);
-  return <div>ManageData</div>;
+
+  useEffect(() => {
+    if (!data?.users?.length) return;
+    findAnswer(data as IMockUserDataRes);
+  }, [data]);
+  return (
+    <React.Fragment>
+      <Typography variant="h3" gutterBottom>
+        ManageData
+      </Typography>
+
+      {answerData &&
+        Object.keys(answerData).map((key) => {
+          return (
+            <div key={key}>
+              <Typography variant="h6" gutterBottom>
+                {key}
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                {JSON.stringify(answerData[key])}
+              </Typography>
+            </div>
+          );
+        })}
+    </React.Fragment>
+  );
 };
 
 export default ManageData;
