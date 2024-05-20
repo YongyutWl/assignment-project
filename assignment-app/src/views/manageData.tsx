@@ -1,5 +1,5 @@
 "use client";
-import { getUserMockup, productManager } from "@/api/mockupApi";
+import { getUserMockup } from "@/api/mockupApi";
 import { IMockUserDataRes } from "@/interface/userMockup";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
