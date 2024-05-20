@@ -8,13 +8,13 @@ export type Props = {
   type: string;
 };
 
-export default function Vegetable({
+const Vegetable = ({
   vegetableList,
   handleVegetable,
 }: {
   vegetableList: Props[];
   handleVegetable: (vegetableItem: Props) => void;
-}) {
+}) => {
   return (
     <React.Fragment>
       <Typography
@@ -30,10 +30,17 @@ export default function Vegetable({
       >
         <Stack spacing={2}>
           {vegetableList.map((item) => {
-            return <VegetableItem key={item.key} vegetableItem={item} handleVegetable={handleVegetable}/>;
+            return (
+              <VegetableItem
+                key={item.key}
+                vegetableItem={item}
+                handleVegetable={handleVegetable}
+              />
+            );
           })}
         </Stack>
       </Grid>
     </React.Fragment>
   );
-}
+};
+export default Vegetable;

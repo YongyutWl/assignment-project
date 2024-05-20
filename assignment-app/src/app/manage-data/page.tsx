@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import ManageData from "@/views/manageData";
 type Props = {};

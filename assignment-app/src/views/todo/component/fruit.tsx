@@ -8,13 +8,13 @@ export type Props = {
   type: string;
 };
 
-export default function Fruit({
+const Fruit = ({
   fruitList,
   handleFruit,
 }: {
   fruitList: Props[];
-  handleFruit: any;
-}) {
+  handleFruit: (fruitItem: Props) => void;
+}) => {
   return (
     <React.Fragment>
       <Typography
@@ -42,4 +42,6 @@ export default function Fruit({
       </Grid>
     </React.Fragment>
   );
-}
+};
+
+export default Fruit;
