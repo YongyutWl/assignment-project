@@ -2,18 +2,14 @@
 import React from "react";
 import { Grid, Stack, Typography } from "@mui/material";
 import VegetableItem from "./vegetableitem";
-export type Props = {
-  key: string;
-  name: string;
-  type: string;
-};
+import { objectType } from "@/views/todo";
 
 const Vegetable = ({
   vegetableList,
   handleVegetable,
 }: {
-  vegetableList: Props[];
-  handleVegetable: (vegetableItem: Props) => void;
+  vegetableList: objectType[];
+  handleVegetable: (vegetableItem: objectType) => void;
 }) => {
   return (
     <React.Fragment>

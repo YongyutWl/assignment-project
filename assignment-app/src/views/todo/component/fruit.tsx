@@ -2,18 +2,14 @@
 import React from "react";
 import { Grid, Stack, Typography } from "@mui/material";
 import FruitItem from "./fruititem";
-export type Props = {
-  key: string;
-  name: string;
-  type: string;
-};
+import { objectType } from "@/views/todo";
 
 const Fruit = ({
   fruitList,
   handleFruit,
 }: {
-  fruitList: Props[];
-  handleFruit: (fruitItem: Props) => void;
+  fruitList: objectType[];
+  handleFruit: (fruitItem: objectType) => void;
 }) => {
   return (
     <React.Fragment>

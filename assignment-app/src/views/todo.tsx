@@ -1,105 +1,104 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Grid, ListItem, Stack, Typography } from "@mui/material";
 import { nanoid } from "nanoid";
 import Fruit from "../views/todo/component/fruit";
 import Vegetable from "./todo/component/vegetable";
-
-export type fruitOrVegetableType = {
+import { listTodo } from "../utils/data";
+export type objectType = {
   type: string;
   name: string;
+  timeStamp: Date;
   key: string;
 };
+
 const Todo = () => {
-  const listTodo = [
-    {
-      type: "Fruit",
-      name: "Apple",
-    },
-    {
-      type: "Vegetable",
-      name: "Broccoli",
-    },
-    {
-      type: "Vegetable",
-      name: "Mushroom",
-    },
-    {
-      type: "Fruit",
-      name: "Banana",
-    },
-    {
-      type: "Vegetable",
-      name: "Tomato",
-    },
-    {
-      type: "Fruit",
-      name: "Orange",
-    },
-    {
-      type: "Fruit",
-      name: "Mango",
-    },
-    {
-      type: "Fruit",
-      name: "Pineapple",
-    },
-    {
-      type: "Vegetable",
-      name: "Cucumber",
-    },
-    {
-      type: "Fruit",
-      name: "Watermelon",
-    },
-    {
-      type: "Vegetable",
-      name: "Carrot",
-    },
-  ];
-  const mapKeyIdToList = listTodo.map((item) => {
+  const mapKeyIdToList: objectType[] = listTodo.map((item) => {
     return {
       key: nanoid(),
       ...item,
+      timeStamp: new Date(),
     };
   });
 
-  const [todoLists, setTodoLists] =
-    useState<fruitOrVegetableType[]>(mapKeyIdToList);
-  const [fruitList, setFruitList] = useState<fruitOrVegetableType[]>([]);
-  const [vegetableList, setVegetableList] = useState<fruitOrVegetableType[]>(
-    []
-  );
+  const [dataList, setDataList] = useState<objectType[]>(mapKeyIdToList);
+  const [fruitList, setFruitList] = useState<objectType[]>([]);
+  const [vegetableList, setVegetableList] = useState<objectType[]>([]);
 
-  const handleList = (item: fruitOrVegetableType) => {
-    const filter = todoLists.filter((ele) => ele.key !== item.key);
-    if (item.type === "Fruit") {
-      setFruitList((prev) => [...prev, item]);
-    }
-    if (item.type === "Vegetable") {
-      setVegetableList((prev) => [...prev, item]);
-    }
-    setTodoLists(filter);
-  };
-  const handleFruit = (item: fruitOrVegetableType) => {
-    setFruitList((prev) => {
-      return prev.filter((ele) => ele.key !== item.key);
-    });
-    setTodoLists((prev) => {
-      return [...prev, item];
-    });
+  const handleRemoveItem = (data: objectType) => {
+    setDataList(dataList.filter((list) => list.name !== data.name));
   };
 
-  const handleVegetable = (item: fruitOrVegetableType) => {
-    setVegetableList((prev) => {
-      return prev.filter((ele) => ele.key !== item.key);
-    });
-    setTodoLists((prev) => {
-      return [...prev, item];
+  const handleData = (data: objectType) => {
+    const date = new Date();
+    const nextFiveSec = new Date(date.getTime() + 5000);
+    if (data.type === "Fruit")
+      setFruitList((prev) => [...prev, { ...data, timeStamp: nextFiveSec }]);
+    if (data.type === "Vegetable")
+      setVegetableList((prev) => [
+        ...prev,
+        { ...data, timeStamp: nextFiveSec },
+      ]);
+    handleRemoveItem(data);
+    return;
+  };
+
+  const handleRackToList = (array: objectType[]): void => {
+    array.map((element: objectType): void => {
+      const date = new Date();
+      const getCurrentSec = date.getSeconds();
+      const getDataSec = new Date(element.timeStamp).getSeconds();
+      if (getCurrentSec === getDataSec || getCurrentSec > getDataSec) {
+        if (element.type === "Fruit") {
+          setFruitList((prev) =>
+            prev.filter((list) => list.key !== element.key)
+          );
+          setDataList((prev) => [
+            ...prev,
+            { ...element, timeStamp: new Date() },
+          ]);
+        }
+
+        if (element.type === "Vegetable") {
+          setVegetableList((prev) =>
+            prev.filter((list) => list.key !== element.key)
+          );
+
+          setDataList((prev) => [
+            ...prev,
+            { ...element, timeStamp: new Date() },
+          ]);
+        }
+      }
+
+      return;
     });
   };
+
+  const handleDeleteFruit = (fruitItem: objectType) => {
+    setFruitList(fruitList.filter((list) => list.key !== fruitItem.key));
+    setDataList((prev) => [...prev, { ...fruitItem, timeStamp: new Date() }]);
+  };
+  const handleDeleteVegetable = (vegetableItem: objectType) => {
+    setVegetableList(
+      vegetableList.filter((list) => list.key !== vegetableItem.key)
+    );
+    setDataList((prev) => [
+      ...prev,
+      { ...vegetableItem, timeStamp: new Date() },
+    ]);
+  };
+
+  useEffect(() => {
+    const array = [...fruitList, ...vegetableList];
+    const interval = setInterval(() => {
+      if (array.length > 0) handleRackToList(array);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [fruitList, vegetableList]);
+
   return (
     <React.Fragment>
       <Grid
@@ -153,13 +152,13 @@ const Todo = () => {
               sx={{ width: "100%", display: "flex", flexDirection: "column" }}
             >
               <Stack spacing={2}>
-                {todoLists.map((item: fruitOrVegetableType) => {
+                {dataList.map((item: objectType) => {
                   return (
                     <ListItem key={item.key}>
                       <ListItemButton
                         onClick={(e) => {
                           e.preventDefault();
-                          handleList(item);
+                          handleData(item);
                         }}
                       >
                         <ListItemText primary={item.name} />
@@ -172,12 +171,12 @@ const Todo = () => {
           </Grid>
         </Grid>
         <Grid item xs={4}>
-          <Fruit fruitList={fruitList} handleFruit={handleFruit} />
+          <Fruit fruitList={fruitList} handleFruit={handleDeleteFruit} />
         </Grid>
         <Grid item xs={4}>
           <Vegetable
             vegetableList={vegetableList}
-            handleVegetable={handleVegetable}
+            handleVegetable={handleDeleteVegetable}
           />
         </Grid>
       </Grid>
