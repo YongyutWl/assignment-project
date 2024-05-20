@@ -88,14 +88,14 @@ const ManageData = () => {
       {answerData &&
         Object.keys(answerData).map((key) => {
           return (
-            <div key={key}>
+            <React.Fragment key={key}>
               <Typography variant="h6" gutterBottom>
                 {key}
               </Typography>
               <Typography variant="subtitle1" gutterBottom>
                 {JSON.stringify(answerData[key])}
               </Typography>
-            </div>
+            </React.Fragment>
           );
         })}
     </React.Fragment>
