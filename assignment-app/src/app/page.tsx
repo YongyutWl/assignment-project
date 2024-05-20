@@ -14,7 +14,7 @@ export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
     path: string
   ) => {
