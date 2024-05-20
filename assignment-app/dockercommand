@@ -1,0 +1,6 @@
+
+docker stop assignment-app
+docker rm assignment-app
+docker rmi assignment-image:latest
+docker build --platform linux/amd64 -t assignment-image .
+docker run -p 6100:6100 -d --name assignment-app assignment-image
