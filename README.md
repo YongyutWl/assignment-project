@@ -1,3 +1,3 @@
 # assignment-project
  
-# Link App https://assignment-app-gold.vercel.app/todo
+# Link App https://assignment-project-gold.vercel.app/
