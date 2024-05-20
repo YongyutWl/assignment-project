@@ -9,25 +9,6 @@ const ManageData = () => {
   const [data, setData] = useState<IMockUserDataRes>();
   const [answerData, setAnswerData] = useState<any>();
 
-  /*[Department]: 
-  {
-    "male": 1,                      // ---> Male Count Summary
-    "female": 1,                    // ---> Female Count Summary
-    "ageRange": "XX-XX",            // ---> Range
-    "hair": {                       // ---> "Color": Color Summary
-              "Black": 1,                
-              "Blond": 1,
-              "Chestnut": 1,
-              "Brown": 1
-            },
-    "addressUser": {                // ---> "firstNamelastName": postalCode
-      "TerryMedhurst": "XXXXX",
-      }
-    }
-   */
-
-  // console.log("answerData", answerData);
-
   const findAnswer = (data: IMockUserDataRes) => {
     if (!data) return;
     const departmentGroup = _.groupBy(data?.users, "company.department");
