@@ -4,28 +4,34 @@ import { IMockUserDataRes } from "@/interface/userMockup";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { Typography } from "@mui/material";
+import { CompanyData } from "@/interface/answer";
 
 const ManageData = () => {
   const [data, setData] = useState<IMockUserDataRes>();
-  const [answerData, setAnswerData] = useState<any>();
+  const [answerData, setAnswerData] = useState<CompanyData>({});
 
   const findAnswer = (data: IMockUserDataRes) => {
     if (!data) return;
     const departmentGroup = _.groupBy(data?.users, "company.department");
     const groupUserLength = _.keys(departmentGroup);
 
-    const answer = _.reduce(
+    const answer: CompanyData = _.reduce(
       groupUserLength,
       (acc, item) => {
         const minAge = _.minBy(departmentGroup[item], "age");
         const maxAge = _.maxBy(departmentGroup[item], "age");
         const countGender = _.countBy(departmentGroup[item], "gender");
         const countHair = _.countBy(departmentGroup[item], "hair.color");
-        const addressUser = _.map(departmentGroup[item], (item) => {
-          return {
-            [`${item.firstName}${item.lastName}`]: item.address.postalCode,
-          };
-        });
+        const addressUser = _.reduce(
+          departmentGroup[item],
+          (acc, item) => {
+            return {
+              ...acc,
+              [`${item.firstName}${item.lastName}`]: item.address.postalCode,
+            };
+          },
+          {}
+        );
 
         return {
           ...acc,
